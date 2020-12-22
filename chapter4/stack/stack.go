@@ -2,6 +2,7 @@
 package stack
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -14,6 +15,12 @@ type BinOp func(int, int) int
 // space delimited.
 // [Refactor - can handle each operator's function]
 func Eval(opMap map[string]BinOp, prec PrecMap, expr string) int {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recovered in Eval.", r)
+		}
+	}()
+
 	ops := []string{"("}
 	var nums []int
 
@@ -41,7 +48,10 @@ func Eval(opMap map[string]BinOp, prec PrecMap, expr string) int {
 		}
 	}
 
-	for _, token := range strings.Split(expr, " ") {
+	for _, token := range strings.Fields(expr) {
+		if token == "errorCase" {
+			panic("Error occurred")
+		}
 		if token == "(" {
 			ops = append(ops, token)
 		} else if _, ok := prec[token]; ok {
