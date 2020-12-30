@@ -18,6 +18,7 @@ func Min(a []int) int {
 	return min
 }
 
+// ParallelMin returns minimum value of given slice using goroutine
 func ParallelMin(a []int, n int) int {
 	if len(a) < n {
 		return Min(a)
